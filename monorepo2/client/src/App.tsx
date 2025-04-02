@@ -26,8 +26,8 @@ function App() {
             title: title(),
             body: body(),
         })
-            .then(() => setTitle(""))
-            .then(() => setBody(""))
+            .then(() => setTitle(''))
+            .then(() => setBody(''))
             .catch(showErrorEffect);
     };
 
@@ -63,7 +63,7 @@ function App() {
             <br />
             <section>
                 <h2>Posts</h2>
-                <For each={postList()}>{(item) => <PostPreview post={item}/>}</For>
+                <For each={postList()}>{(item) => <PostPreview post={item} />}</For>
             </section>
         </main>
     );
