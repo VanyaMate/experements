@@ -1,0 +1,28 @@
+{
+    "name": "types",
+    "version": "1.0.0",
+    "main": "./dist/types.mjs",
+    "module": "./dist/types.js",
+    "types": "./dist/src/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/types.mjs",
+            "types": "./dist/src/index.d.ts",
+            "require": "./dist/index.js"
+        }
+    },
+    "scripts": {
+        "build": "vite build"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "dependencies": {
+        "@vanyamate/types-kit": "^0.0.20"
+    },
+    "devDependencies": {
+        "vite": "^6.2.4",
+        "vite-plugin-dts": "^4.5.3"
+    }
+}

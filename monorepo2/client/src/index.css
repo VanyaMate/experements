@@ -1,0 +1,32 @@
+* {
+    margin      : 0;
+    padding     : 0;
+    box-sizing  : border-box;
+    font-family : Consolas, 'monospace';
+}
+
+main {
+    width     : 600px;
+    max-width : 100%;
+    padding   : 10px;
+    margin    : 0 auto;
+
+    .error {
+        padding: 20px;
+        background: color-mix(in srgb, red 50%, transparent 10%);
+        color: black;
+        border-radius: 10px;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    section {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+}

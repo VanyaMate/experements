@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "skipLibCheck": true,
+        "strict": true,
+        "moduleResolution": "node",
+        "outDir": "dist",
+        "declaration": true
+    }
+}

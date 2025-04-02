@@ -1,0 +1,23 @@
+{
+    "name": "server",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "build": "vite build"
+    },
+    "keywords": [],
+    "author": "",
+    "type": "module",
+    "license": "ISC",
+    "description": "",
+    "dependencies": {
+        "fastify": "^5.2.2",
+        "tsx": "^4.19.3",
+        "types": "file:../types"
+    },
+    "devDependencies": {
+        "@types/node": "^22.13.17",
+        "vite": "^6.2.4",
+        "vite-plugin-dts": "^4.5.3"
+    }
+}
