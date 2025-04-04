@@ -1,0 +1,22 @@
+{
+    "name": "shared",
+    "version": "1.0.0",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        "import": "./dist/index.js",
+        "require": "./dist/index.cjs",
+        "types": "./dist/index.d.ts"
+    },
+    "dependencies": {
+        "@vanyamate/types-kit": "^0.0.20"
+    },
+    "devDependencies": {
+        "vite": "^6.2.5",
+        "vite-plugin-dts": "^4.5.3"
+    },
+    "scripts": {
+        "build": "vite build"
+    },
+    "type": "module"
+}
