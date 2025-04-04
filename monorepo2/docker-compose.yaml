@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  shared:
+    build: ./shared
+    container_name: shared
+    volumes:
+      - shared_volume:/app/shared
+
+  client:
+    build: ./client
+    container_name: client
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./client:/app/client
+      - /app/client/node_modules
+      - shared_volume:/app/shared
+    depends_on:
+      - shared
+    command: [ "sh", "-c","npm i && npm run dev" ]
+
+  server:
+    build: ./server
+    container_name: server
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./server:/app/server
+      - /app/server/node_modules
+      - shared_volume:/app/shared
+    depends_on:
+      - shared
+    command: [ "sh", "-c", "npm run build && node ./dist/server.mjs" ]
+
+volumes:
+  shared_volume:
