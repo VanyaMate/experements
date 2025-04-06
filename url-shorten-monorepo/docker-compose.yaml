@@ -9,10 +9,37 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DATABASE}
-    ports:
-      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  shared:
+    build: "./shared"
+    container_name: shared
+
+  server:
+    build: "./server"
+    container_name: server
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./server:/app/server
+    depends_on:
+      - shared
+      - db
+    # command: [ "sh", "-c", "npm i && npm run build && node ./dist/index.mjs" ]
+    command: [ "sh", "-c", "npm i && npm run dev" ]
+
+  client:
+    build: "./client"
+    container_name: client
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./client/:/app/client
+    depends_on:
+      - shared
+      - server
+    command: [ "sh", "-c", "npm i && npm run dev" ]
 
 volumes:
   postgres_data:

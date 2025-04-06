@@ -1,8 +1,10 @@
 import { IDbSqlService } from '../db-sql-service.interface';
-import { Client } from 'pg';
+import pg from 'pg';
+
+const { Client } = pg;
 
 export class PgDbSqlService implements IDbSqlService {
-    private _pg: Client;
+    private _pg: pg.Client;
 
     constructor(config: string) {
         this._pg = new Client(config);
@@ -16,7 +18,7 @@ export class PgDbSqlService implements IDbSqlService {
         return this._pg.end();
     }
 
-    query<Result>(sql: string, args: Array<string>): Promise<Array<Result>> {
+    async query<Result>(sql: string, args: Array<string>): Promise<Array<Result>> {
         return this._pg.query(sql, args).then((response) => response.rows);
     }
 }
