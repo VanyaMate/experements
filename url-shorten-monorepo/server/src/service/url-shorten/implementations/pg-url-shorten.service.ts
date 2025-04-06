@@ -1,9 +1,17 @@
-import { DomainUrl, DomainUrlInfo } from 'shared';
+import {
+    DomainUrl,
+    DomainUrlInfo,
+    aliasValidator,
+    isDomainUrlCreateData,
+    originalUrlValidator,
+} from 'shared';
 import { IUrlShortenService } from '../url-shorten-service.interface';
 import { IDbSqlService } from '../../db/db-sql-service.interface';
-import { aliasValidator, isDomainUrlCreateData, originalUrlValidator } from 'shared';
 import { IDbModelService } from '../../db/db-model-service.inteface';
 import { getSafeSqlArgument } from '../../db/utils/getSafeSqlArgument';
+import { catchError } from '../../../../utils/catchError';
+import { UrlSqlSchema } from '../../../../schemas';
+import { urlSchemaToDomainUrl } from '../../../../converters/schemaToDomain';
 
 export class PgUrlShortenService implements IUrlShortenService, IDbModelService {
     private _tableName: string = 'url_shorten';
@@ -41,7 +49,7 @@ export class PgUrlShortenService implements IUrlShortenService, IDbModelService 
             }
 
             try {
-                const [result] = await this._dbSqlService.query<DomainUrl>(
+                const [result] = await this._dbSqlService.query<UrlSqlSchema>(
                     // @formatter:off
                     `
                         INSERT INTO ${this._tableName} (id, original_url)
@@ -51,17 +59,9 @@ export class PgUrlShortenService implements IUrlShortenService, IDbModelService 
                     // @formatter:on
                     [getSafeSqlArgument(safeAlias), getSafeSqlArgument(data.originalUrl)],
                 );
-                return result;
+                return urlSchemaToDomainUrl(result);
             } catch (error: unknown) {
-                if (typeof error === 'string') {
-                    throw new Error(error);
-                }
-
-                if (error instanceof Error) {
-                    throw new Error(error.message);
-                }
-
-                throw new Error('Ошибка создания ссылки');
+                throw catchError(error, 'Ошибка создания ссылки');
             }
         }
 
@@ -74,7 +74,21 @@ export class PgUrlShortenService implements IUrlShortenService, IDbModelService 
     }
 
     getAll(): Promise<Array<DomainUrl>> {
-        throw new Error('Method not implemented.');
+        try {
+            return this._dbSqlService
+                .query<UrlSqlSchema>(
+                    // @formatter:off
+                    `
+                        SELECT *
+                        FROM ${this._tableName}
+                    `,
+                    // @formatter:on
+                    [],
+                )
+                .then((result) => result.map(urlSchemaToDomainUrl));
+        } catch (error: unknown) {
+            throw catchError(error, 'Ошибка получения ссылок');
+        }
     }
 
     getInfoById(id: string): Promise<DomainUrlInfo> {
