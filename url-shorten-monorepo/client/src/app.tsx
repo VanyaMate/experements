@@ -1,10 +1,23 @@
-import { useState, useLayoutEffect, useRef, useCallback } from 'preact/hooks';
-import { DomainUrl, DomainUrlCreateData } from 'shared';
+import { useLayoutEffect, useRef, useCallback } from 'preact/hooks';
+import { DomainUrlCreateData } from 'shared';
+import {
+    createUrlEffect,
+    getAllUrlEffect,
+    urlsList,
+    urlsPending,
+} from './app/model/url/url.store.ts';
+import { useStore } from './app/model/useStore.ts';
+import { PageNotification } from './widget/notification/PageNotification/PageNotification.tsx';
+import {
+    notifyErrorEffect,
+    notifySuccessEffect,
+} from './app/model/notification/notification.store.ts';
 
 export function App() {
-    const [urlList, setUrlList] = useState<Array<DomainUrl>>([]);
     const inputAlias = useRef<HTMLInputElement>(null);
     const inputUrl = useRef<HTMLInputElement>(null);
+    const pending = useStore(urlsPending);
+    const list = useStore(urlsList);
 
     const createUrl = useCallback(() => {
         if (inputAlias.current && inputUrl.current) {
@@ -21,30 +34,26 @@ export function App() {
                 data.alias = alias;
             }
 
-            fetch(`${__API__}`, {
-                method: 'POST',
-                body: JSON.stringify(data),
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-                .then((response) => {
+            createUrlEffect(data)
+                .then(() => {
                     inputAliasCurrent.value = '';
                     inputUrlCurrent.value = '';
-                    return response.json();
                 })
-                .then((response: DomainUrl) => setUrlList((prev) => prev.concat(response)));
+                .then(() => notifySuccessEffect('URL создан'))
+                .catch(notifyErrorEffect)
+                .catch(() => {
+                    console.log('err');
+                });
         }
     }, []);
 
     useLayoutEffect(() => {
-        fetch(`${__API__}/all`)
-            .then((response) => response.json())
-            .then((list) => setUrlList(list));
+        getAllUrlEffect().catch(notifyErrorEffect);
     }, []);
 
     return (
         <main>
+            <PageNotification />
             <h1>Hello world</h1>
             <input
                 placeholder="Alias"
@@ -55,9 +64,15 @@ export function App() {
                 ref={inputUrl}
             />
             <button onClick={createUrl}>Создать</button>
-            {urlList.map((item) => (
-                <div key={item.id}>{item.id} - {item.originalUrl}</div>
-            ))}
+            {pending ? (
+                <p>Loading..</p>
+            ) : (
+                list.map((item) => (
+                    <div key={item.id}>
+                        {item.id} - {item.originalUrl}
+                    </div>
+                ))
+            )}
         </main>
     );
 }

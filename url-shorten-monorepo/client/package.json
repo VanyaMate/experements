@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vanyamate/sec": "^0.1.5",
     "preact": "^10.26.2",
     "shared": "file:../shared/shared-0.0.1.tgz"
   },

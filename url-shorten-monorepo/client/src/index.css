@@ -4,3 +4,8 @@
     box-sizing  : border-box;
     font-family : Consolas, monospace;
 }
+
+html, body {
+    background : #101216;
+    color: #fff;
+}

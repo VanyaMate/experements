@@ -1,0 +1,54 @@
+.container {
+    border-radius  : 10px;
+    outline        : 1px solid transparent;
+    display        : flex;
+    flex-direction : column;
+    width          : 300px;
+    max-width      : 100%;
+    opacity        : 0;
+    transform      : scale(1) translateY(100%);
+    height         : 0;
+    transition     : .2s;
+    margin-top     : 0;
+    overflow       : hidden;
+
+    &.visible {
+        margin-top : 10px;
+        opacity    : 1;
+        transform  : scale(1) translateY(0);
+    }
+
+    header {
+        color          : #FFF;
+        font-weight    : bold;
+        text-transform : uppercase;
+    }
+
+    p {
+        color : #FFF;
+    }
+
+    .content {
+        padding : 10px;
+    }
+
+    &.error {
+        background    : #362022;
+        outline-color : #403034;
+    }
+
+    &.success {
+        background    : #202A22;
+        outline-color : #303634;
+    }
+
+    &.warning {
+        background    : #2F2F20;
+        outline-color : #363630;
+    }
+
+    &.info {
+        background    : #202226;
+        outline-color : #303436;
+    }
+}
