@@ -15,6 +15,9 @@ services:
   shared:
     build: "./shared"
     container_name: shared
+    volumes:
+      - shared_volume:/app/shared/pack
+    command: [ "sh", "-c", "mkdir -p /app/shared/pack && mv shared-*.tgz /app/shared/pack" ]
 
   server:
     build: "./server"
@@ -23,6 +26,7 @@ services:
       - "3000:3000"
     volumes:
       - ./server:/app/server
+      - shared_volume:/app/shared
     depends_on:
       - shared
       - db
@@ -36,6 +40,7 @@ services:
       - "5173:5173"
     volumes:
       - ./client/:/app/client
+      - shared_volume:/app/shared
     depends_on:
       - shared
       - server
@@ -43,3 +48,4 @@ services:
 
 volumes:
   postgres_data:
+  shared_volume:

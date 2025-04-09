@@ -1,3 +1,6 @@
 FROM node:22
 WORKDIR /app/shared
-COPY shared-0.0.1.tgz .
+COPY . .
+RUN npm i
+RUN npm run build
+RUN npm pack

@@ -1,3 +1,5 @@
 export interface IDbModelService {
-    initialize(): Promise<void>;
+    sync (): Promise<void>;
+
+    initialize (): Promise<void>;
 }
