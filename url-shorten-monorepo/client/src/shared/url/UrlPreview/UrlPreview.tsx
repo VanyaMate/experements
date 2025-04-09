@@ -1,13 +1,13 @@
 import { DomainUrl } from 'shared';
 import css from './UrlPreview.module.css';
-import {} from 'preact-iso';
+import { memo } from 'preact/compat';
 
 
 export type UrlPreviewProps = {
     url: DomainUrl;
 }
 
-export const UrlPreview = function (props: UrlPreviewProps) {
+export const UrlPreview = memo(function UrlPreview (props: UrlPreviewProps) {
     return (
         <article className={ css.container }>
             <header>
@@ -25,4 +25,4 @@ export const UrlPreview = function (props: UrlPreviewProps) {
             <footer>{ new Date(props.url.createdAt).toLocaleString() }</footer>
         </article>
     );
-};
+});
