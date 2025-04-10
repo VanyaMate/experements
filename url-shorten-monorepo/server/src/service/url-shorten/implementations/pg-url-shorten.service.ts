@@ -140,11 +140,11 @@ export class PgUrlShortenService implements IUrlShortenService,
                         FROM ${this._tableName}
                         WHERE id = $1
                     `
-                    // @formatter:on
+                        // @formatter:on
                     , [ getSafeSqlArgument(id) ],
                 )
                 .then((result) => result.map(urlSchemaToDomainUrlInfo))
-                .then((list) => list[0])
+                .then((list) => list[0]);
         } catch (error: unknown) {
             throw catchError(error, 'Ошибка получения ссылки');
         }
