@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: postgres
+    image: postgres:15.2
+    restart: always
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  shared:
+    build: "./shared"
+    container_name: shared
+    volumes:
+      - shared_volume:/app/shared/pack
+    command: [ "sh", "-c", "mkdir -p /app/shared/pack && mv shared-*.tgz /app/shared/pack" ]
+
+  server:
+    build: "./server"
+    container_name: server
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./server:/app/server
+      - shared_volume:/app/shared
+    depends_on:
+      - shared
+      - db
+    command: [ "sh", "-c", "npm i && npm run dev" ]
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+
+volumes:
+  shared_volume:
+  postgres_data:

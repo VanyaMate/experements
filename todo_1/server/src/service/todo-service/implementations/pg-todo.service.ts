@@ -31,8 +31,8 @@ export class PgTodoService implements ITodoService, IDbService {
                     description TEXT,
                     created_at BIGINT DEFAULT (EXTRACT(EPOCH FROM CURRENT_TIMESTAMP) * 1000)::BIGINT,
                     expires_at BIGINT DEFAULT 0,
-                    color TEXT DEFAULT "",
-                    status TEXT DEFAULT "${DomainTodoStatus.PENDING}",
+                    color TEXT DEFAULT '',
+                    status TEXT DEFAULT '${DomainTodoStatus.PENDING}'
                 )
             `,
             // @formatter:on
